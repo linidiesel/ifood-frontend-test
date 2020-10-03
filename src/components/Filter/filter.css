@@ -2,10 +2,12 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+    margin-top: 40px;
 }
 
 .filter-container .filter-wrapper-item {
     width: 100%;
+    text-align: center;
     font-size: 14px;
 }
 

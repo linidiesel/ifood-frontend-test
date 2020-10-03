@@ -24,7 +24,7 @@ const HomeAuthorized = () =>
 
 const Home = ({ location = {} }) => {
     const isUserUnauthorized = location.state?.status === STATUS.USER_UNAUTHORIZED || !location.state?.status;
-
+    console.log("iai", location.state);
     if(isUserUnauthorized)
         return <HomeUnauthorized/>
 

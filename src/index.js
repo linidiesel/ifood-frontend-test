@@ -13,7 +13,6 @@ import './index.css';
 import { AuthContextProvider } from './contexts/AuthContext';
 
 ReactDOM.render(
-  <div className='container'>
     <React.StrictMode>
       <AuthContextProvider>
         <Router>
@@ -27,8 +26,6 @@ ReactDOM.render(
           </Switch>
         </Router>
         </AuthContextProvider>
-    </React.StrictMode>
-  </div>,
-
+    </React.StrictMode>,
   document.getElementById('root')
 );

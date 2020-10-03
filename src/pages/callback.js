@@ -15,7 +15,9 @@ const Callback = () => {
         const queryParams = search.split("?");
         const queryParamVerified = queryParams.find(data => data.includes(SPOTIFY.ACCESS_ALLOWED))
         if(queryParamVerified) {
-            setcallbackCodeToken(queryParamVerified.replace("code=", ""))
+            const tokenCode = queryParamVerified.replace("code=", "")
+            localStorage.setItem("token-code", tokenCode)
+            setcallbackCodeToken(tokenCode);
         }
     })();
 

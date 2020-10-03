@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import InputMask from "react-input-mask";
+import Container from '@material-ui/core/Container';
 import { AuthContext } from '../../contexts/AuthContext';
 
 import { getFilters } from "../../services/filter";
@@ -51,12 +52,14 @@ const Filter = () => {
 
     if(dataFilter?.filters){
         return (
-            <div className="filter-container">
-                { dataFilter.filters.map(filter => {
-                    const element = expectedFilters[`${filter.id}`];
-                    if(element) return element(findById(filter.id));
-                })}
-            </div>);
+            <Container>
+                <div className="filter-container">
+                    { dataFilter.filters.map(filter => {
+                        const element = expectedFilters[`${filter.id}`];
+                        if(element) return element(findById(filter.id));
+                    })}
+                </div>
+            </Container>);
     }
 
     return <p>Ainda nao tem nda ali.</p>
