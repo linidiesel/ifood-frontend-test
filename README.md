@@ -27,26 +27,3 @@ As this application will be a worldwide success, it must be prepared to be acces
 We **strongly recommend** using React to build the application.
 Also, briefly elaborate on your solution architecture details, choice of patterns and frameworks.
 Fork this repository and submit your code.
-
-
-
-
-
-
-TODO
-max-age: 10min
-dockerfile
-layout
-skeleton screen
-readme do create reactapp
-eject react app
-caminhos relativos
-
-
-Internacionalização pro futuro.
-controle de cache
-refresh token
-.env
-
-
-todos os testes do mundo.
