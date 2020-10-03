@@ -1,0 +1,23 @@
+.filter-container{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.filter-container .filter-wrapper-item {
+    width: 100%;
+    font-size: 14px;
+}
+
+.filter-container .filter-wrapper-item select {
+    width: 80%;
+    height: 30px;
+    font-size: inherit;
+}
+
+.filter-container .filter-wrapper-item input {
+    width: 80%;
+    height: 30px;
+    padding: 0 10px;
+    font-size: inherit;
+}

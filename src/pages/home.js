@@ -2,6 +2,7 @@ import React from 'react';
 import { withRouter } from "react-router";
 
 import { StartsWithSpotifyLink } from '../components/Button'
+import Filter from '../components/Filter'
 import { STATUS } from "../helpers/constants";
 
 import './home.css';
@@ -14,7 +15,9 @@ const HomeUnauthorized = () =>
         <StartsWithSpotifyLink />
     </div>
 
-const HomeAuthorized = () => <p>Tudo certin. (: </p>
+const HomeAuthorized = () => {
+    return (<Filter/>)
+}
 
 const Home = ({ location = {} }) => {
     const isUserUnauthorized = location.state?.status === STATUS.USER_UNAUTHORIZED;

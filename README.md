@@ -44,5 +44,9 @@ caminhos relativos
 
 
 Internacionalização pro futuro.
+controle de cache
+refresh token
+.env
 
 
+todos os testes do mundo.
