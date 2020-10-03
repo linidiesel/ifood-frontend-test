@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useLocation, Redirect } from 'react-router-dom';
-import { getToken } from "../services/spotify";
+import { AuthContext } from "../contexts/AuthContext";
 import { SPOTIFY, STATUS } from "../helpers/constants";
 
 const Callback = () => {
     //Tratamento de erro para a exception do effect
     const { search = [] } = useLocation();
-    const [token, setToken] = useState(undefined);
-    const [authToken, setAuthToken] = useState(undefined);
+    const [callbackCodeToken, setcallbackCodeToken] = useState(undefined);
+    const { authGetToken, authError, authData } = useContext(AuthContext);
 
     (() => {
-        if(authToken) return;
+        if(callbackCodeToken) return;
 
         const queryParams = search.split("?");
-        const auth = queryParams.find(data => data.includes(SPOTIFY.ACCESS_ALLOWED))
-        if(auth){
-            setAuthToken(auth.replace("code=", ""))
+        const queryParamVerified = queryParams.find(data => data.includes(SPOTIFY.ACCESS_ALLOWED))
+        if(queryParamVerified) {
+            setcallbackCodeToken(queryParamVerified.replace("code=", ""))
         }
     })();
 
@@ -27,20 +27,17 @@ const Callback = () => {
         }}>
         </Redirect>
 
-    useEffect(() =>{
-        getToken(authToken)
-        .then(data => {
-            localStorage.setItem("token", data.access_token);
-            setToken(data.access_token);
-            })
-        .catch(error => console.log("error", error));
-    }, [authToken])
+    useEffect(() => {
+        if(authData) return;
+        console.log("oir")
+        authGetToken(callbackCodeToken);
+    }, [authData])
 
-    if(!authToken) {
+    if(!callbackCodeToken || authError) {
         return <RedirectUser status={STATUS.USER_UNAUTHORIZED}/>
     }
 
-    if(token){
+    if(authData){
         return <RedirectUser status={STATUS.USER_AUTHORIZED}/>
     }
 

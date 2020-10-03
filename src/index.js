@@ -10,10 +10,12 @@ import Home from './pages/home';
 import Callback from './pages/callback';
 
 import './index.css';
+import { AuthContextProvider } from './contexts/AuthContext';
 
 ReactDOM.render(
   <div className='container'>
     <React.StrictMode>
+      <AuthContextProvider>
         <Router>
           <Switch>
             <Route path="/callback">
@@ -24,6 +26,7 @@ ReactDOM.render(
             </Route>
           </Switch>
         </Router>
+        </AuthContextProvider>
     </React.StrictMode>
   </div>,
 

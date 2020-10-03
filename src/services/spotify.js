@@ -11,26 +11,55 @@ const getToken = async (code) => {
     params.set("client_secret", CLIENT_SECRET);
     params.set("redirect_uri", "http://localhost:3001/callback/");
 
-
-    const response = await fetch('https://accounts.spotify.com/api/token', {
+    return await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
+        mode: 'cors',
         headers: new Headers({
             'Content-Type': 'application/x-www-form-urlencoded',
         }),
         body: params,
+    }).then(response => {
+        if(response.ok) return response.json()
+
+        throw new Error(response.status);
     });
-    return await response.json();
+}
+
+const getRefreshToken = async (refreshToken) => {
+    const params = new URLSearchParams();
+    params.set("grant_type", "refresh_token");
+    params.set("refresh_token", refreshToken);
+    params.set("client_id", CLIENT_ID);
+    params.set("client_secret", CLIENT_SECRET);
+    params.set("redirect_uri", "http://localhost:3001/callback/");
+
+    return await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        mode: 'cors',
+        headers: new Headers({
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }),
+        body: params,
+    }).then(response => {
+        if(response.ok) return response.json()
+
+        throw new Error(response.status);
+    });
 }
 
 const getPlaylists = async (token, queryParams) => {
-    const response = await fetch(`https://api.spotify.com/v1/browse/featured-playlists?${queryParams}`, {
+    return await fetch(`https://api.spotify.com/v1/browse/featured-playlists?${queryParams}`, {
         method: 'GET',
+        mode: 'cors',
         headers: new Headers({
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         })
+    }).then(response => {
+        if(response.ok) return response.json()
+
+        throw new Error(response.status);
     });
-    return await response.json();
 }
 
-export { getPlaylists, getToken, authorizationURL };
+export { getPlaylists, getToken, getRefreshToken, authorizationURL };
