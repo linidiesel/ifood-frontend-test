@@ -8,7 +8,7 @@ Create a web application called Spotifood used to display the preferred playlist
 * The page is composed of two components:
     * One list of featured playlists
     * One filter component with API filter fields and one local search text input to filter the playlists by "name".
-    
+
 * The filter component should be used to filter the elements displayed by the list of featured playlists.
 * The API filter fields and their possible values/type should be mounted by consuming this API **[1. Playlists Filters]** (http://www.mocky.io/v2/5a25fade2e0000213aa90776)
 * The featured playlists to be displayed should be consumed from this API **[2. See the documentation from Spotify]** (https://developer.spotify.com/web-api/get-list-featured-playlists/)
@@ -27,3 +27,22 @@ As this application will be a worldwide success, it must be prepared to be acces
 We **strongly recommend** using React to build the application.
 Also, briefly elaborate on your solution architecture details, choice of patterns and frameworks.
 Fork this repository and submit your code.
+
+
+
+
+
+
+TODO
+max-age: 10min
+dockerfile
+layout
+skeleton screen
+readme do create reactapp
+eject react app
+caminhos relativos
+
+
+Internacionalização pro futuro.
+
+

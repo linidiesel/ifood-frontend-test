@@ -1,0 +1,27 @@
+a.btn-starts-spotify {
+    width: 220px;
+    height: 50px;
+    display: inline-block;
+    border-radius: 30px;
+    background-color: #1db954;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    outline: none;
+    text-decoration: none;
+}
+
+a.btn-starts-spotify:hover {
+    background-color: #1ed760;
+}
+
+a.btn-starts-spotify>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+a.btn-starts-spotify>div>span{
+    margin-right: 10px;
+    color: #fff;
+}
