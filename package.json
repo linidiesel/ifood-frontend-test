@@ -17,6 +17,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "docker:build": "docker build -t spotifood .",
+    "docker:start": "docker run -it -p 3000:3000 spotifood",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
