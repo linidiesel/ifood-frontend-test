@@ -7,6 +7,7 @@ const AuthContextProvider = (props) => {
     const [queryFilters, setQueryFilters] = useState({});
     const [authData, setAuthData] = useState(null);
     const [authError, setAuthError] = useState(null);
+    const [isAuthorized, setIsAuthorized] = useState(false);
 
     const setSelectedFilter = (filter) => setQueryFilters({ ...queryFilters, ...filter });
 
@@ -37,7 +38,7 @@ const AuthContextProvider = (props) => {
     // })
 
     return (
-      <AuthContext.Provider value={{ setSelectedFilter, authGetToken, queryFilters, authData, authError }}>
+      <AuthContext.Provider value={{ setSelectedFilter, authGetToken, queryFilters, authData, authError, isAuthorized, setIsAuthorized }}>
         {props.children}
       </AuthContext.Provider>
     );

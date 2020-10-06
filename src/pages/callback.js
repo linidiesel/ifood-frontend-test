@@ -7,7 +7,7 @@ const Callback = () => {
     //Tratamento de erro para a exception do effect
     const { search = [] } = useLocation();
     const [callbackCodeToken, setcallbackCodeToken] = useState(undefined);
-    const { authGetToken, authError, authData } = useContext(AuthContext);
+    const { authGetToken, authError, authData, setIsAuthorized, isAuthorized } = useContext(AuthContext);
 
     (() => {
         if(callbackCodeToken) return;
@@ -18,16 +18,12 @@ const Callback = () => {
             const tokenCode = queryParamVerified.replace("code=", "")
             localStorage.setItem("token-code", tokenCode)
             setcallbackCodeToken(tokenCode);
+            setIsAuthorized(true);
+            return;
         }
-    })();
 
-    const RedirectUser = (status) =>
-        <Redirect
-            to={{
-            pathname: "/",
-            state: { status }
-        }}>
-        </Redirect>
+        setIsAuthorized(false);
+    })();
 
     useEffect(() => {
         if(authData) return;
@@ -35,12 +31,8 @@ const Callback = () => {
         authGetToken(callbackCodeToken);
     }, [authData])
 
-    if(!callbackCodeToken || authError) {
-        return <RedirectUser status={STATUS.USER_UNAUTHORIZED}/>
-    }
-
-    if(authData){
-        return <RedirectUser status={STATUS.USER_AUTHORIZED}/>
+    if(!isAuthorized || authError || authData) {
+        return <Redirect to={{pathname: "/"}} />
     }
 
     return <>Aguarde...</>;

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { withRouter } from "react-router";
 
 import { StartsWithSpotifyLink } from '../components/Button'
 import Filter from '../components/Filter'
 import List from '../components/List';
 
-import { STATUS } from "../helpers/constants";
+import { AuthContext } from "../contexts/AuthContext";
 import './home.css';
 
 const HomeUnauthorized = () =>
@@ -22,10 +22,10 @@ const HomeAuthorized = () =>
         <List/>
     </>
 
-const Home = ({ location = {} }) => {
-    const isUserUnauthorized = location.state?.status === STATUS.USER_UNAUTHORIZED || !location.state?.status;
-    console.log("iai", location.state);
-    if(isUserUnauthorized)
+const Home = () => {
+    const { isAuthorized } = useContext(AuthContext)
+
+    if(!isAuthorized)
         return <HomeUnauthorized/>
 
     return <HomeAuthorized/>
