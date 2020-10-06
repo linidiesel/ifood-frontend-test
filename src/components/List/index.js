@@ -44,8 +44,6 @@ const List = () => {
     const screenLarge = useMediaQuery(theme.breakpoints.only('lg'));
     const screenMedium = useMediaQuery(theme.breakpoints.only('md'));
     const screenSmall = useMediaQuery(theme.breakpoints.only('sm'));
-    const screenExtraSmall = useMediaQuery(theme.breakpoints.only('xs'));
-    const screenNarrow = useMediaQuery('(max-width:340px)');
 
     const getScreenWidth = () => {
         if (screenExtraLarge) {

@@ -7,11 +7,14 @@ import { getFilters } from "../../services/filter";
 
 import "./filter.css";
 
-
-
 const Filter = () => {
     const [dataFilter, setDataFilter] = useState(undefined);
     const { setSelectedFilter } = useContext(AuthContext);
+
+    const [timestamp, setTimestamp] = useState('10/10/2019 10:20')
+    const [limit, setLimit] = useState(1);
+    const [country, setCountry] = useState(undefined);
+    const [locale, setLocale] = useState(undefined);
 
     useEffect(() => {
         getFilters()
@@ -21,30 +24,51 @@ const Filter = () => {
             .catch(error => console.log("error dta filter", error))
     }, []);
 
-    const SelectLocaleOrCountry = ({ data }) =>
+    const SelectCountry = ({ data }) =>
+        <div className="filter-wrapper-item" id={data.id}>
+            <select value={country} name={data.id} onChange={({ currentTarget }) => { setCountry(currentTarget.value); setSelectedFilter({ [`${currentTarget.name}`] : currentTarget.value })}}>
+                {data.values.map(item => <option key={item.value} value={item.value}>{ item.name }</option>)}
+            </select>
+        </div>
+
+    const SelectLocale = ({ data }) =>
     <div className="filter-wrapper-item" id={data.id}>
-        <select name={data.id} onChange={({ target }) => setSelectedFilter({ [`${target.name}`] : target.value })}>
-            {data.values.map(item => <option>{ item.name }</option>)}
+        <select value={locale} name={data.id} onChange={({ currentTarget }) => { setLocale(currentTarget.value); setSelectedFilter({ [`${currentTarget.name}`] : currentTarget.value })}}>
+            {data.values.map(item => <option key={item.value} value={item.value}>{ item.name }</option>)}
         </select>
     </div>;
 
-    const InputTimestamp = (props) =>
-        <div className="filter-wrapper-item">
-            <InputMask mask="9999-12-31T23:59:59" placeholder="yyyy-mm-ddThh:mm:ss" onChange={props.onChange} value={props.value} />
-        </div>
+    const convertDate = ({ currentTarget }) => {
+        try {
+            const date = currentTarget.value.split("/");
+            const hour = date[2].toString().substring(5,10);
+            const addHours = hour.includes("_") ? "" : hour;
+            date[2] = date[2].toString().substring(0,4);
+            const dateFormat = new Date(`${date[2]}/${date[1] - 1}/${date[0]} ${addHours}`);
+            const isoDate = dateFormat.toISOString();
+            setSelectedFilter({ timestamp: isoDate })
+        } catch (error) { }
+    }
+
+    const InputTimestamp = (props) => {
+        return (
+            <div className="filter-wrapper-item">
+                <InputMask mask="99/99/9999 99:99" placeholder="dd/mm/yyyy hh:mm" onChange={props.onChange} value={props.value} onBlur={convertDate}/>
+            </div>)
+    }
 
     const InputLimitToPagination = ({ data }) => {
         const { validation = {} } = data || {};
         return (
             <div className="filter-wrapper-item">
-                <input type="number" max={validation.max} min={validation.min}/>
+                <input type="number" max={validation.max} min={validation.min} value={limit} key="limit" onChange={({ currentTarget }) => setLimit( currentTarget.value )} onBlur={({ currentTarget }) => setSelectedFilter({ limit: currentTarget.value })}/>
             </div>)
     }
 
     const expectedFilters = {
-        'locale': (data) => (<SelectLocaleOrCountry data={data}/>),
-        'country': (data) => (<SelectLocaleOrCountry data={data}/>),
-        'timestamp': () => (<InputTimestamp/>),
+        'locale': (data) => (<SelectLocale data={data}/>),
+        'country': (data) => (<SelectCountry data={data}/>),
+        'timestamp': () => (<InputTimestamp value={timestamp}/>),
         'limit': (data) => (<InputLimitToPagination data={data}/>),
     }
 
@@ -56,13 +80,13 @@ const Filter = () => {
                 <div className="filter-container">
                     { dataFilter.filters.map(filter => {
                         const element = expectedFilters[`${filter.id}`];
-                        if(element) return element(findById(filter.id));
+                        if(element) return <React.Fragment key={filter.id}>{element(findById(filter.id))}</React.Fragment>;
                     })}
                 </div>
             </Container>);
     }
 
-    return <p>Ainda nao tem nda ali.</p>
+    return <p>Buscando filtros ...</p>
 }
 
 export default Filter;
