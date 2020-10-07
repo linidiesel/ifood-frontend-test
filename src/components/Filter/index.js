@@ -61,7 +61,7 @@ const Filter = () => {
         const { validation = {} } = data || {};
         return (
             <div className="filter-wrapper-item">
-                <input type="number" max={validation.max} min={validation.min} value={limit} key="limit" onChange={({ currentTarget }) => setLimit( currentTarget.value )} onBlur={({ currentTarget }) => setSelectedFilter({ limit: currentTarget.value })}/>
+                <input type="number" id="limit" max={validation.max} min={validation.min} value={limit} key="limit" onChange={({ currentTarget }) => setLimit( currentTarget.value )} onBlur={({ currentTarget }) => { console.log("aqui no limit", currentTarget.value); setSelectedFilter({ limit: currentTarget.value })}}/>
             </div>)
     }
 

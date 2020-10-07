@@ -31,11 +31,12 @@ const AuthContextProvider = (props) => {
       }, interval * 1000);
     }
 
-    // useEffect(() => {
-    //   const tokenCode = localStorage.getItem("token-code");
-    //   console.log("aaaaa", tokenCode);
-    //   // authGetToken(tokenCode);
-    // })
+    useEffect(() => {
+      const tokenCode = localStorage.getItem("token");
+      console.log("aaaaa", tokenCode);
+      setAuthData(tokenCode);
+      // authGetToken(tokenCode);
+    }, [])
 
     return (
       <AuthContext.Provider value={{ setSelectedFilter, authGetToken, queryFilters, authData, authError, isAuthorized, setIsAuthorized }}>

@@ -64,16 +64,15 @@ const List = () => {
     return (
         <div className={classes.root}>
             <GridList cellHeight={400} className={classes.gridList} cols={getScreenWidth()}>
-                <GridListTile key="Subheader" cols={getScreenWidth()} style={{ height: 'auto' }}>
+                <GridListTile key="gridList-tile" cols={getScreenWidth()} style={{ height: 'auto' }}>
                     <ListSubheader component="div" className={classes.titleSubHeader}>{data.message}</ListSubheader>
                 </GridListTile>
                 {data.playlists.items.map((tile) => (
-                    <GridListTile key={tile.img}>
+                    <GridListTile key={tile.id}>
                         <img src={tile.images[0].url} alt={tile.title} />
                         <GridListTileBar
-                        title={tile.name}
-                        subtitle={<span>by: {tile.owner.display_name}</span>}
-                        />
+                            title={tile.name}
+                            subtitle={<span>by: {tile.owner.display_name}</span>}/>
                     </GridListTile>
                 ))}
             </GridList>

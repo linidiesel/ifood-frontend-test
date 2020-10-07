@@ -23,9 +23,9 @@ const HomeAuthorized = () =>
     </>
 
 const Home = () => {
-    const { isAuthorized } = useContext(AuthContext)
+    const { authData } = useContext(AuthContext)
 
-    if(!isAuthorized)
+    if(!authData)
         return <HomeUnauthorized/>
 
     return <HomeAuthorized/>
