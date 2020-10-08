@@ -11,10 +11,20 @@ const AuthContextProvider = (props) => {
     const setSelectedFilter = (filter) => setQueryFilters({ ...queryFilters, ...filter });
 
     const setError = (error) => {
-      if(error.status === 401) {
+      if(error.message === "401") {
         localStorage.removeItem("token");
+        localStorage.removeItem("refresh-token");
         setAuthData(null);
       }
+    }
+
+    const saveToken = (data, isRefreshTokenSave = false) => {
+      localStorage.setItem("token", data.access_token);
+
+      if(isRefreshTokenSave)
+        localStorage.setItem("refresh-token", JSON.stringify({ token: data.refresh_token, expireInSeconds: data.expires_in }))
+
+      setAuthData(data);
     }
 
     const authGetToken = (authToken) => {
@@ -22,20 +32,30 @@ const AuthContextProvider = (props) => {
 
         getToken(authToken)
         .then(data => {
-            localStorage.setItem("token", data.access_token);
+            saveToken(data, true);
             authRefreshTokenIntervalStarts(data);
-            setAuthData(data);
             })
         .catch(error => setAuthError(error));
     }
 
-    const authRefreshTokenIntervalStarts = ({ expires_in: interval, refresh_token: refreshToken }) => {
-      setInterval(() => {
-        getRefreshToken(refreshToken)
-        .then(data => localStorage.setItem("token", data.access_token))
+    const authRefreshTokenIntervalStarts = () => {
+      const localRefreshToken = JSON.parse(localStorage.getItem("refresh-token"))
+
+      if(!localRefreshToken) return;
+
+      const { token, expireInSeconds } = localRefreshToken;
+      const interval = setInterval(() => {
+        getRefreshToken(token)
+        .then(saveToken)
         .catch(error => setAuthError(error));
-      }, interval * 1000);
+      }, expireInSeconds * 1000);
+      return interval;
     }
+
+    useEffect(() => {
+      const interval = authRefreshTokenIntervalStarts();
+      return () => clearInterval(interval);
+    }, [])
 
     return (
       <AuthContext.Provider value={{ setSelectedFilter, authGetToken, queryFilters, authData, authError, setError }}>

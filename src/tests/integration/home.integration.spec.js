@@ -3,7 +3,7 @@ import { render, screen, waitFor, debug, fireEvent } from '@testing-library/reac
 import { BrowserRouter } from 'react-router-dom';
 
 import Home from '../../pages/home';
-import { AuthContext, AuthContextProvider } from '../../contexts/AuthContext';
+import { AuthContextProvider } from '../../contexts/AuthContext';
 import { authorizationURL, getPlaylists } from '../../services/spotify';
 import { getFilters } from '../../services/filter';
 
@@ -46,6 +46,7 @@ describe('Home: authenticated', () => {
     beforeEach(() => {
         getFilters.mockImplementation(() => Promise.resolve(mockFilter));
         getPlaylists.mockImplementation(() => Promise.resolve(mockPlaylist));
+        jest.spyOn(Date, 'now').mockImplementation(() => new Date('2020-10-08 01:00:00'));
     })
 
     afterEach(() => jest.resetAllMocks())
@@ -66,14 +67,6 @@ describe('Home: authenticated', () => {
 
     const scenarios = [
         [
-            "timestamp filter is changed",
-            "filter-timestamp",
-            "10/10/2020 10:10",
-            undefined,
-            "timestamp=2019-09-10T13:20:00.000Z",
-            2
-        ],
-        [
             "locale filter is changed",
             "filter-locale",
             "en_AU",
@@ -90,12 +83,20 @@ describe('Home: authenticated', () => {
             2
         ],
         [
+            "timestamp filter is changed",
+            "filter-timestamp",
+            "10/10/2020 10:10",
+            undefined,
+            "timestamp=2020-09-10T13:10:00.000Z",
+            2
+        ],
+        [
             "limit filter is changed",
             "filter-limit",
             "1",
             () => { const mockItemsFiltered = [ mockPlaylist.playlists.items[0] ]
                     const mockPlaylistFiltered = { mockFilter, playlists: { items: mockItemsFiltered } }
-                    getPlaylists.mockImplementation(() => Promise.resolve(mockPlaylistFiltered)); 
+                    getPlaylists.mockImplementation(() => Promise.resolve(mockPlaylistFiltered));
             },
             "limit=1",
             1
@@ -109,7 +110,7 @@ describe('Home: authenticated', () => {
             await waitFor(async () => expect(getPlaylists).toHaveBeenCalled());
 
             if(fnCallToChangeMock) fnCallToChangeMock()
-            
+
             fireEvent.change(container.querySelector(`#${elementID}`), { target: { value: elementValue } });
             fireEvent.blur(container.querySelector(`#${elementID}`));
 

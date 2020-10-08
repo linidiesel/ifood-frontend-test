@@ -63,12 +63,12 @@ const Filter = () => {
         const { validation = {} } = data || {};
         return (
             <div className="filter-wrapper-item">
-                <input 
-                    type="number" 
-                    id="filter-limit" 
-                    max={validation.max} 
-                    min={validation.min} 
-                    defaultValue={limit} 
+                <input
+                    type="number"
+                    id="filter-limit"
+                    max={validation.max}
+                    min={validation.min}
+                    defaultValue={limit}
                     onBlur={({ currentTarget }) => { setLimit(currentTarget.value); setSelectedFilter({ limit: currentTarget.value })}}/>
             </div>)
     }
