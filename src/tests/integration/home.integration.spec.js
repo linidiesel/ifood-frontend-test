@@ -48,6 +48,8 @@ describe('Home: authenticated', () => {
         getPlaylists.mockImplementation(() => Promise.resolve(mockPlaylist));
     })
 
+    afterEach(() => jest.resetAllMocks())
+
     it("renders with data in filters and playlists", async () => {
         const { container } = renderHome(true);
 
@@ -62,20 +64,58 @@ describe('Home: authenticated', () => {
         expect(container.getElementsByClassName("MuiGridListTileBar-root")).toHaveLength(2);
     })
 
-    it("renders list with only 1 playlist after changing limit filter to 1", async () => {
-        const { container } = renderHome(true);
+    const scenarios = [
+        [
+            "timestamp filter is changed",
+            "filter-timestamp",
+            "10/10/2020 10:10",
+            undefined,
+            "timestamp=2019-09-10T13:20:00.000Z",
+            2
+        ],
+        [
+            "locale filter is changed",
+            "filter-locale",
+            "en_AU",
+            undefined,
+            "locale=en_AU",
+            2
+        ],
+        [
+            "country filter is changed",
+            "filter-country",
+            "AU",
+            undefined,
+            "country=AU",
+            2
+        ],
+        [
+            "limit filter is changed",
+            "filter-limit",
+            "1",
+            () => { const mockItemsFiltered = [ mockPlaylist.playlists.items[0] ]
+                    const mockPlaylistFiltered = { mockFilter, playlists: { items: mockItemsFiltered } }
+                    getPlaylists.mockImplementation(() => Promise.resolve(mockPlaylistFiltered)); 
+            },
+            "limit=1",
+            1
+        ]
+    ]
 
-        await waitFor(async () => expect(getPlaylists).toHaveBeenCalledTimes(2));
+    it.each(scenarios)(`renders list with new data when %s`,
+        async (_, elementID, elementValue, fnCallToChangeMock, expectedParamOnPlaylistCall, expectedItemsInList) => {
+            const { container } = renderHome(true);
 
-        const newPlaylistItem = { ...mockPlaylist }
-        newPlaylistItem.playlists.items.splice(0, 1);
-        getPlaylists.mockImplementation(() => Promise.resolve(newPlaylistItem));
+            await waitFor(async () => expect(getPlaylists).toHaveBeenCalled());
 
-        fireEvent.change(container.querySelector("#limit"), { target: { value: 1 } });
-        fireEvent.blur(container.querySelector("#limit"));
+            if(fnCallToChangeMock) fnCallToChangeMock()
 
-        await waitFor(async () => expect(getPlaylists).toHaveBeenCalledWith("mock", 'limit=1'));
+            console.log("elemento", elementID)
+            fireEvent.change(container.querySelector(`#${elementID}`), { target: { value: elementValue } });
+            fireEvent.blur(container.querySelector(`#${elementID}`));
 
-        expect(container.getElementsByClassName("MuiGridListTileBar-root")).toHaveLength(1);
-    })
+            await waitFor(async () => expect(getPlaylists).toHaveBeenCalledWith("mock", expectedParamOnPlaylistCall));
+
+            expect(container.getElementsByClassName("MuiGridListTileBar-root")).toHaveLength(expectedItemsInList);
+        })
 })
