@@ -1,17 +1,20 @@
-const CLIENT_ID = 'f385af34437143eeb2fb7ecba4c421a7';
-const CLIENT_SECRET = '1fc95c2315a748c4b3d039191f0ac38a'
+const appClientID = process.env.REACT_APP_SPOTIFY_CLIENT_ID
+const appClientSecret = process.env.REACT_APP_SPOTIFY_SECRET_ID
+const spotifyAuthAPIURL = process.env.REACT_APP_SPOTIFY_AUTHENTICATION_API_URL;
+const spotifyAPIURL = process.env.REACT_APP_SPOTIFY_API_URL;
+const spotifyRedirectURI = process.env.REACT_APP_SPOTIFY_REDIRECT_URI;
 
-const authorizationURL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=http://localhost:3001/callback/`;
+const authorizationURL = `${spotifyAuthAPIURL}authorize?client_id=${appClientID}&response_type=code&redirect_uri=${spotifyRedirectURI}`;
 
 const getToken = async (code) => {
     const params = new URLSearchParams();
     params.set("grant_type", "authorization_code");
     params.set("code", code);
-    params.set("client_id", CLIENT_ID);
-    params.set("client_secret", CLIENT_SECRET);
-    params.set("redirect_uri", "http://localhost:3001/callback/");
+    params.set("client_id", appClientID);
+    params.set("client_secret", appClientSecret);
+    params.set("redirect_uri", spotifyRedirectURI);
 
-    return await fetch('https://accounts.spotify.com/api/token', {
+    return await fetch(`${spotifyAuthAPIURL}api/token`, {
         method: 'POST',
         mode: 'cors',
         headers: new Headers({
@@ -29,11 +32,11 @@ const getRefreshToken = async (refreshToken) => {
     const params = new URLSearchParams();
     params.set("grant_type", "refresh_token");
     params.set("refresh_token", refreshToken);
-    params.set("client_id", CLIENT_ID);
-    params.set("client_secret", CLIENT_SECRET);
-    params.set("redirect_uri", "http://localhost:3001/callback/");
+    params.set("client_id", appClientID);
+    params.set("client_secret", appClientSecret);
+    params.set("redirect_uri", spotifyRedirectURI);
 
-    return await fetch('https://accounts.spotify.com/api/token', {
+    return await fetch(`${spotifyAuthAPIURL}api/token`, {
         method: 'POST',
         mode: 'cors',
         headers: new Headers({
@@ -48,7 +51,7 @@ const getRefreshToken = async (refreshToken) => {
 }
 
 const getPlaylists = async (token, queryParams) => {
-    return await fetch(`https://api.spotify.com/v1/browse/featured-playlists?${queryParams}`, {
+    return await fetch(`${spotifyAPIURL}browse/featured-playlists?${queryParams}`, {
         method: 'GET',
         mode: 'cors',
         headers: new Headers({
