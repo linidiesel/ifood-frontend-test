@@ -26,17 +26,29 @@ const Filter = () => {
 
     const SelectCountry = ({ data }) =>
         <div className="filter-wrapper-item" id={data.id}>
+            <label>País</label>
             <select id="filter-country" value={country} name={data.id} onChange={({ currentTarget }) => { setCountry(currentTarget.value); setSelectedFilter({ [`${currentTarget.name}`] : currentTarget.value })}}>
                 {data.values.map(item => <option key={item.value} value={item.value}>{ item.name }</option>)}
             </select>
         </div>
 
-    const SelectLocale = ({ data }) =>
-    <div className="filter-wrapper-item" id={data.id}>
-        <select id="filter-locale" value={locale} name={data.id} onChange={({ currentTarget }) => { setLocale(currentTarget.value); setSelectedFilter({ [`${currentTarget.name}`] : currentTarget.value })}}>
-            {data.values.map(item => <option key={item.value} value={item.value}>{ item.name }</option>)}
-        </select>
-    </div>;
+    const SelectLocale = ({ data }) => {
+        const localeStrings = {
+            en_AU: "Ingles Australia",
+            de_DE: "Alemão",
+            pt_BR: "Portugues Brasil",
+            fr_FR: "Frances",
+            en_US: "Ingles USA",
+            es_AR: "Espanhol Argentina",
+        }
+        return (
+            <div className="filter-wrapper-item" id={data.id}>
+                <label>Idioma</label>
+                <select id="filter-locale" value={locale} name={data.id} onChange={({ currentTarget }) => { setLocale(currentTarget.value); setSelectedFilter({ [`${currentTarget.name}`] : currentTarget.value })}}>
+                    {data.values.map(item => <option key={item.value} value={item.value}>{ localeStrings[item.value] }</option>)}
+                </select>
+            </div>);
+    }
 
     const convertDate = ({ currentTarget }) => {
         try {
@@ -55,21 +67,35 @@ const Filter = () => {
     const InputTimestamp = (props) => {
         return (
             <div className="filter-wrapper-item">
+                <label>Data e hora</label>
                 <InputMask id="filter-timestamp" mask="99/99/9999 99:99" placeholder="dd/mm/yyyy hh:mm" onChange={props.onChange} defaultValue={props.value} onBlur={convertDate}/>
             </div>)
+    }
+
+    const verifyLimit = ({ currentTarget }) => {
+        const { min, max, value } = currentTarget;
+
+        let selectedValue = value;
+        if(value < min || value > max){
+            selectedValue = min;
+        }
+
+        setLimit(selectedValue);
+        setSelectedFilter({ limit: selectedValue })
     }
 
     const InputLimitToPagination = ({ data }) => {
         const { validation = {} } = data || {};
         return (
             <div className="filter-wrapper-item">
+                <label>Itens por página</label>
                 <input
                     type="number"
                     id="filter-limit"
                     max={validation.max}
                     min={validation.min}
                     defaultValue={limit}
-                    onBlur={({ currentTarget }) => { setLimit(currentTarget.value); setSelectedFilter({ limit: currentTarget.value })}}/>
+                    onBlur={verifyLimit}/>
             </div>)
     }
 

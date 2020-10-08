@@ -9,6 +9,12 @@
     width: 100%;
     text-align: center;
     font-size: 14px;
+    display: flex;
+    flex-flow: column;
+}
+
+.filter-container .filter-wrapper-item label{
+    text-align: left;
 }
 
 .filter-container .filter-wrapper-item select {
