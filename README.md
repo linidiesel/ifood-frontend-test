@@ -27,3 +27,64 @@ As this application will be a worldwide success, it must be prepared to be acces
 We **strongly recommend** using React to build the application.
 Also, briefly elaborate on your solution architecture details, choice of patterns and frameworks.
 Fork this repository and submit your code.
+
+## Instalation guide
+
+Requirements:
+* Node > 10
+* Docker - if you want the application running in a container
+
+**1. Creating your `.env` file**
+
+The project has a `sample.env` file that contains the format of the environment variables expected by the application. Use these sample variables to create your `.env` file in the projects root folder.
+
+_This step is essential for the execution of the project._
+
+**2. Configure your spotify app**
+
+Configure your spotify app callback to `<host:port>/callback`
+
+**3. Running the tests**
+
+execute: `npm test`
+
+The current test coverage is low. :(
+This is the point of more attention to me.
+
+**4. Runnign the project**
+
+_**local**_
+
+after the `npm i` command, you should run:` npm start`.
+The project will be available in the PORT variable configured on .env file
+
+_**In a container**_
+
+run the command: `npm run docker: build`
+
+then run: `npm run docker: start`
+
+Note that both the container exposure port and the port that I direct are 3001, and this information needs to be in accordance with the `.env` file.
+
+
+**General notes**
+
+Its possible that is a CORS related problem that was not prioritized in development. I suggest, in a palliative way, that you enable some CORS plugins. =x
+
+This bug will be fixed in the future.
+
+
+## Licence
+
+This app was created using `create-react-app` cli. [See more about the licence](https://github.com/facebook/create-react-app/).
+
+## Author
+
+[Aline Diesel](https://github.com/alineDiesel)
+
+This code is in a different repository, compared to the link, cause I lost the password and the recovery process takes time. (:
+
+
+I hope you enjoy.
+
+

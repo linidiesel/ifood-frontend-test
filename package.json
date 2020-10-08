@@ -20,7 +20,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "docker:build": "docker build -t spotifood .",
-    "docker:start": "docker run -it -p 3000:3000 spotifood",
+    "docker:start": "docker run --env-file .env -p 3001:3001 -e 'PORT=3001' -it spotifood",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

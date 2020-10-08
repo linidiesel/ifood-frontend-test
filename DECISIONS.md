@@ -25,6 +25,8 @@ The .env file was created so as not to have any sensitive information, such as t
 It also assists us in decoupling information from the code, such as consumption URLs from the Spotify APIs and filter, and allows us to have different values per environment.
 There is a sample-env file in the root that can be used as an example.
 
+Remembering that sensitive `!==` secret
+
 
 
 
