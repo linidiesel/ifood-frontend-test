@@ -109,8 +109,7 @@ describe('Home: authenticated', () => {
             await waitFor(async () => expect(getPlaylists).toHaveBeenCalled());
 
             if(fnCallToChangeMock) fnCallToChangeMock()
-
-            console.log("elemento", elementID)
+            
             fireEvent.change(container.querySelector(`#${elementID}`), { target: { value: elementValue } });
             fireEvent.blur(container.querySelector(`#${elementID}`));
 

@@ -12,19 +12,17 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 // import Pagination from '@material-ui/lab/Pagination';
 
 const List = () => {
-    const { queryFilters } = useContext(AuthContext);
+    const { queryFilters, setError } = useContext(AuthContext);
     const [data, setData] = useState(null);
     const [token] = useState(localStorage.getItem("token"));
 
     useEffect(() => {
-        console.log("query", queryFilters);
         const mountQueryParams = Object.keys(queryFilters).map((param) => `${param}=${queryFilters[param]}`);
         getPlaylists(token, mountQueryParams.join('&'))
             .then((data) => {
-                console.log("ta entrando aqui ", data)
                 setData(data)
             })
-            .catch(error => console.log("num deu", error))
+            .catch(error => setError(error))
     }, [queryFilters])
 
     const useStyles = makeStyles((theme) => ({

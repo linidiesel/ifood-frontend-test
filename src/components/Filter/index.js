@@ -47,14 +47,15 @@ const Filter = () => {
             const dateFormat = new Date(`${date[2]}/${date[1] - 1}/${date[0]} ${addHours}`);
             dateFormat.toLocaleDateString("pt-BR", {})
             const isoDate = dateFormat.toISOString();
+            setTimestamp(currentTarget.value);
             setSelectedFilter({ timestamp: isoDate })
-        } catch (error) { }
+        } catch (error){}
     }
 
     const InputTimestamp = (props) => {
         return (
             <div className="filter-wrapper-item">
-                <InputMask id="filter-timestamp" mask="99/99/9999 99:99" placeholder="dd/mm/yyyy hh:mm" onChange={props.onChange} value={props.value} onBlur={convertDate}/>
+                <InputMask id="filter-timestamp" mask="99/99/9999 99:99" placeholder="dd/mm/yyyy hh:mm" onChange={props.onChange} defaultValue={props.value} onBlur={convertDate}/>
             </div>)
     }
 
@@ -62,7 +63,13 @@ const Filter = () => {
         const { validation = {} } = data || {};
         return (
             <div className="filter-wrapper-item">
-                <input type="number" id="filter-limit" max={validation.max} min={validation.min} value={limit} key="limit" onChange={({ currentTarget }) => setLimit( currentTarget.value )} onBlur={({ currentTarget }) => { console.log("aqui no limit", currentTarget.value); setSelectedFilter({ limit: currentTarget.value })}}/>
+                <input 
+                    type="number" 
+                    id="filter-limit" 
+                    max={validation.max} 
+                    min={validation.min} 
+                    defaultValue={limit} 
+                    onBlur={({ currentTarget }) => { setLimit(currentTarget.value); setSelectedFilter({ limit: currentTarget.value })}}/>
             </div>)
     }
 

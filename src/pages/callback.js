@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useLocation, Redirect } from 'react-router-dom';
 import { AuthContext } from "../contexts/AuthContext";
-import { SPOTIFY, STATUS } from "../helpers/constants";
+import { SPOTIFY } from "../helpers/constants";
 
 const Callback = () => {
-    //Tratamento de erro para a exception do effect
     const { search = [] } = useLocation();
     const [callbackCodeToken, setcallbackCodeToken] = useState(undefined);
-    const { authGetToken, authError, authData, setIsAuthorized, isAuthorized } = useContext(AuthContext);
+    const [isAuthorized, setIsAuthorized] = useState(undefined);
+    const { authGetToken, authError, authData } = useContext(AuthContext);
 
     (() => {
         if(callbackCodeToken) return;
@@ -16,7 +16,6 @@ const Callback = () => {
         const queryParamVerified = queryParams.find(data => data.includes(SPOTIFY.ACCESS_ALLOWED))
         if(queryParamVerified) {
             const tokenCode = queryParamVerified.replace("code=", "")
-            localStorage.setItem("token-code", tokenCode)
             setcallbackCodeToken(tokenCode);
             setIsAuthorized(true);
             return;
@@ -27,7 +26,7 @@ const Callback = () => {
 
     useEffect(() => {
         if(authData) return;
-        console.log("oir")
+
         authGetToken(callbackCodeToken);
     }, [authData])
 

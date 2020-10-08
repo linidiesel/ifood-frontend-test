@@ -5,11 +5,17 @@ const AuthContext = createContext();
 
 const AuthContextProvider = (props) => {
     const [queryFilters, setQueryFilters] = useState({});
-    const [authData, setAuthData] = useState(null);
+    const [authData, setAuthData] = useState(localStorage.getItem("token"));
     const [authError, setAuthError] = useState(null);
-    const [isAuthorized, setIsAuthorized] = useState(false);
 
     const setSelectedFilter = (filter) => setQueryFilters({ ...queryFilters, ...filter });
+
+    const setError = (error) => {
+      if(error.status === 401) {
+        localStorage.removeItem("token");
+        setAuthData(null);
+      }
+    }
 
     const authGetToken = (authToken) => {
         if(authData) return;
@@ -31,15 +37,8 @@ const AuthContextProvider = (props) => {
       }, interval * 1000);
     }
 
-    useEffect(() => {
-      const tokenCode = localStorage.getItem("token");
-      console.log("aaaaa", tokenCode);
-      setAuthData(tokenCode);
-      // authGetToken(tokenCode);
-    }, [])
-
     return (
-      <AuthContext.Provider value={{ setSelectedFilter, authGetToken, queryFilters, authData, authError, isAuthorized, setIsAuthorized }}>
+      <AuthContext.Provider value={{ setSelectedFilter, authGetToken, queryFilters, authData, authError, setError }}>
         {props.children}
       </AuthContext.Provider>
     );
