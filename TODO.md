@@ -10,4 +10,4 @@
 
 ## Issues
 - [ ] Pagination
-- [ ] Update after n seconds.
+- [ ] Tests to callback

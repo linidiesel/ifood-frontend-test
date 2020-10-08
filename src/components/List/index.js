@@ -9,6 +9,8 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
+
+const INTERVAL_TO_RELOAD_PLAYLIST_IN_MS = 30000;
 // import Pagination from '@material-ui/lab/Pagination';
 
 const List = () => {
@@ -16,14 +18,25 @@ const List = () => {
     const [data, setData] = useState(null);
     const [token] = useState(localStorage.getItem("token"));
 
-    useEffect(() => {
+    const requestPlaylists = () => {
         const mountQueryParams = Object.keys(queryFilters).map((param) => `${param}=${queryFilters[param]}`);
         getPlaylists(token, mountQueryParams.join('&'))
             .then((data) => {
                 setData(data)
             })
             .catch(error => setError(error))
+    }
+
+    useEffect(() => {
+        requestPlaylists();
     }, [queryFilters])
+
+    useEffect(() => {
+        const interval = setInterval(() => { requestPlaylists() }, INTERVAL_TO_RELOAD_PLAYLIST_IN_MS)
+        return () => clearInterval(interval);
+    }, [])
+
+
 
     const useStyles = makeStyles((theme) => ({
         root: {
